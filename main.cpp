@@ -43,8 +43,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    float playerOneWinRate = playerOneWins * 100.0f / SIM_RUNS;
-    float playerTwoWinRate = 100.0f - playerOneWinRate;
+    float playerOneWinRate = (playerOneWins * 100.0f) / SIM_RUNS;
+    float playerTwoWinRate = (playerTwoWins * 100.0f) / SIM_RUNS;
 
     std::cout << "Player One - " << playerOneWins << " wins - "
               << playerOneWinRate << "% win rate" << std::endl;
