@@ -3,13 +3,7 @@
 #include <iostream>
 
 Board::Board() {
-    // Prepare an empty board.
-    for (int r = 0; r < BOARD_SIZE; ++r) {
-        for (int c = 0; c < BOARD_SIZE; ++c) {
-            set(r, c, NONE);
-        }
-    }
-
+    board_array.reset();
     // Initialize board position for reversi match.
     set(3, 3, DARK);
     set(4, 4, DARK);
@@ -28,12 +22,12 @@ Board Board::getCopy() const {
 }
 
 int Board::count(PlayerColor color) const {
-    int r_count;
+    int r_count = 0;
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
             if (get(r, c) == color) {
                 ++r_count;
-            } 
+            }
         }
     }
     return r_count;
@@ -182,7 +176,9 @@ void Board::print() const {
 
 bool Board::set(int r, int c, PlayerColor color) {
     if (isWithinBoard(r, c)) {
-        board_array[BOARD_SIZE * r + c] = color;
+        short index = 2 * (BOARD_SIZE * r + c);
+        board_array[index + 1] = 1;
+        board_array[index] = color == DARK;
         return true;
     } else {
         // TODO: Handle error.
@@ -192,7 +188,14 @@ bool Board::set(int r, int c, PlayerColor color) {
 
 PlayerColor Board::get(int r, int c) const {
     if (isWithinBoard(r, c)) {
-        return board_array[BOARD_SIZE * r + c];
+        short index = 2 * (BOARD_SIZE * r + c);
+        if (!board_array[index + 1]) {
+            return NONE;
+        } else if (board_array[index]) {
+            return DARK;
+        } else {
+            return LIGHT;
+        }
     } else {
         // TODO: Handle error.
         std::cerr << "Board::get >> Bad value! \n";

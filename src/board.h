@@ -4,12 +4,13 @@
 #include "action.h"
 #include "playercolor.h"
 
+#include <bitset>
 #include <vector>
 
 #define BOARD_SIZE 8
 
 class Board {
-    PlayerColor board_array[BOARD_SIZE * BOARD_SIZE];
+    std::bitset<128> board_array;
 public:
     Board();
     bool attempt(Action action);

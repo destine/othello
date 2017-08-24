@@ -1,40 +1,20 @@
 #ifndef __PLAYERCOLOR_H__
 #define __PLAYERCOLOR_H__
 
-/*
-#include <algorithm>
+#include <bitset>
 
-class PlayerColor {
-    const unsigned short _value;
-public:
-    friend inline bool operator==(const PlayerColor&, const PlayerColor&);
-    friend inline bool operator!=(const PlayerColor&, const PlayerColor&);
-    PlayerColor(): _value(0) {}
-    PlayerColor(unsigned short value): _value(value) {}
-    PlayerColor(const PlayerColor& obj): _value(obj._value) {}
-    PlayerColor& operator=(const PlayerColor& obj) {
-        std::swap(_value, obj._value);
-        return *this;
-    }
-};
+/* PlayerColor is represented as a two bit bitset, with the left bit
+ * representing the presence or lack of a piece, and the right bit
+ * representing the parity of the piece if the left bit is set.
+ */
+typedef std::bitset<2> PlayerColor;
 
-extern const PlayerColor NONE;
-extern const PlayerColor DARK;
-extern const PlayerColor LIGHT;
-
-inline bool operator==(const PlayerColor& lhs, const PlayerColor& rhs) {
-    return &lhs == &rhs;
-}
-inline bool operator!=(const PlayerColor& lhs, const PlayerColor& rhs) {
-    return &lhs != &rhs;
-}
-*/
-
-typedef unsigned short PlayerColor;
-
-const PlayerColor NONE = 0;
-const PlayerColor DARK = 1;
-const PlayerColor LIGHT = 2;
+/* Represented as 0b00. */
+const PlayerColor NONE = PlayerColor(0);
+/* Represented as 0b01. */
+const PlayerColor LIGHT = PlayerColor(1);
+/* Represented as 0b11. */
+const PlayerColor DARK = PlayerColor(3);
 
 PlayerColor reverse(PlayerColor color);
 
