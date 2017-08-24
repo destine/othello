@@ -1,13 +1,13 @@
 #include "player.h"
 
-int heuristic(Board board, PlayerColor color) {
+int heuristic(const Board board, PlayerColor color) {
     return board.count(color) - board.count(reverse(color));
 }
 
-/* Computes the minimum reward or cost for a given game tree depth level given
- * a certain action and assuming optimal play.
+/* Estimates the value of a given game state BOARD for side COLOR at depth
+ * DEPTH.
  */
-int getBestActionHelper(Board board, PlayerColor color, int depth = 4) {
+int getNextActionHelper(const Board board, PlayerColor color, int depth = 3) {
     // Our base case. Our heuristic is simply the number of disks we have on
     // the board.
     if (depth == 0) {
@@ -20,8 +20,8 @@ int getBestActionHelper(Board board, PlayerColor color, int depth = 4) {
     int bestReward = -64;
     for (; it != actionList.end(); ++it) {
         Board testBoard = board.getCopy();
-        testBoard.attempt(*it);        
-        int reward = getBestActionHelper(testBoard, reverse(color), depth - 1);
+        testBoard.attempt(*it);
+        int reward = getNextActionHelper(testBoard, reverse(color), depth - 1);
         if (reward > bestReward) {
             bestReward = reward;
         }
@@ -29,24 +29,20 @@ int getBestActionHelper(Board board, PlayerColor color, int depth = 4) {
     return bestReward;
 }
 
-Action getBestAction(Board board, PlayerColor color) {
-    std::vector<Action> actionList = board.getMovesFor(color);
+Action GreedyPlayer::getNextAction(Board board) {
+    std::vector<Action> actionList = board.getMovesFor(getColor());
     std::vector<Action>::iterator it = actionList.begin();
-    int current = board.count(color);
+    int current = board.count(getColor());
     int bestReward = 0;
     std::vector<Action>::iterator bestAction = actionList.begin();
     for (; it != actionList.end(); ++it) {
         Board testBoard = board.getCopy();
         testBoard.attempt(*it);        
-        int reward = 0 - getBestActionHelper(testBoard, reverse(color));
+        int reward = 0 - getNextActionHelper(testBoard, reverse(getColor()));
         if (reward > bestReward) {
             bestReward = reward;
             bestAction = it;
         }
     }
     return *bestAction;
-}
-
-Action GreedyPlayer::getNextAction(Board board) {
-    return getBestAction(board, getColor());
 }
