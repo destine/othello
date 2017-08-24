@@ -13,17 +13,17 @@ class Board {
 public:
     Board();
     bool attempt(Action action);
-    bool existMovesFor(PlayerColor playerColor);
-    void print();
-    std::vector<Action> getMovesFor(PlayerColor playerColor);
-    int count(PlayerColor color);
-    Board getCopy();
+    bool existMovesFor(PlayerColor playerColor) const;
+    void print() const;
+    std::vector<Action> getMovesFor(PlayerColor playerColor) const;
+    int count(PlayerColor color) const;
+    Board getCopy() const;
 private:
-    bool isValid(Action action, PlayerColor playerColor);
+    bool isValid(Action action, PlayerColor playerColor) const;
     bool set(int r, int c, PlayerColor color);
-    PlayerColor get(int r, int c);
-    bool _isValidHelper(Action& action, int rowIncrement, int colIncrement);
-    void _attemptHelper(Action& action, int rowIncrement, int colIncrement);
+    PlayerColor get(int r, int c) const;
+    bool _isValidHelper(Action& action, int rowIncr, int colIncr) const;
+    void _attemptHelper(Action& action, int rowIncr, int colIncr);
 };
 
 #endif

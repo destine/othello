@@ -17,7 +17,7 @@ Board::Board() {
     set(4, 3, LIGHT);
 }
 
-Board Board::getCopy() {
+Board Board::getCopy() const {
     Board copy;
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
@@ -27,7 +27,7 @@ Board Board::getCopy() {
     return copy; 
 }
 
-int Board::count(PlayerColor color) {
+int Board::count(PlayerColor color) const {
     int r_count;
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
@@ -49,7 +49,7 @@ bool isWithinBoard(int r, int c) {
     return true;
 }
 
-bool Board::isValid(Action action, PlayerColor color) {
+bool Board::isValid(Action action, PlayerColor color) const {
     // Check if square is empty.
     if (get(action.getRow(), action.getCol()) != NONE) {
         return false;
@@ -126,7 +126,7 @@ bool Board::attempt(Action action) {
     }
 }
 
-bool Board::existMovesFor(PlayerColor playerColor) {
+bool Board::existMovesFor(PlayerColor playerColor) const {
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
             Action testAction(playerColor, r, c);
@@ -138,7 +138,7 @@ bool Board::existMovesFor(PlayerColor playerColor) {
     return false;
 }
 
-std::vector<Action> Board::getMovesFor(PlayerColor playerColor) {
+std::vector<Action> Board::getMovesFor(PlayerColor playerColor) const {
     std::vector<Action> myActions;
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
@@ -164,7 +164,7 @@ void printCell(PlayerColor cellColor) {
     }
 }
 
-void Board::print() {
+void Board::print() const {
     std::cout << "   ";
     for (int i = 1; i <= BOARD_SIZE; ++i) {
         std::cout << " " << i << " ";
@@ -190,7 +190,7 @@ bool Board::set(int r, int c, PlayerColor color) {
     }
 }
 
-PlayerColor Board::get(int r, int c) {
+PlayerColor Board::get(int r, int c) const {
     if (isWithinBoard(r, c)) {
         return board_array[BOARD_SIZE * r + c];
     } else {
@@ -200,7 +200,7 @@ PlayerColor Board::get(int r, int c) {
     }
 }
 
-bool Board::_isValidHelper(Action& action, int rIncr, int cIncr) {
+bool Board::_isValidHelper(Action& action, int rIncr, int cIncr) const {
     int r = action.getRow() + rIncr;
     int c = action.getCol() + cIncr;
     bool found = false;
