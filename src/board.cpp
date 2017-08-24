@@ -177,7 +177,7 @@ void Board::print() const {
 bool Board::set(int r, int c, PlayerColor color) {
     if (isWithinBoard(r, c)) {
         short index = 2 * (BOARD_SIZE * r + c);
-        board_array[index + 1] = 1;
+        board_array[index + 1] = color != NONE;
         board_array[index] = color == DARK;
         return true;
     } else {
