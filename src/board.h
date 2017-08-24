@@ -18,10 +18,10 @@ public:
     std::vector<Action> getMovesFor(PlayerColor playerColor) const;
     int count(PlayerColor color) const;
     Board getCopy() const;
-private:
-    bool isValid(Action action, PlayerColor playerColor) const;
-    bool set(int r, int c, PlayerColor color);
     PlayerColor get(int r, int c) const;
+private:
+    bool set(int r, int c, PlayerColor color);
+    bool isValid(Action action, PlayerColor playerColor) const;
     bool _isValidHelper(Action& action, int rowIncr, int colIncr) const;
     void _attemptHelper(Action& action, int rowIncr, int colIncr);
 };
