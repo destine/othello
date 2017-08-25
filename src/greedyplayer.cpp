@@ -22,23 +22,48 @@ int heuristicHelper(const Board board, PlayerColor color) {
         ++corners;
     }
 
-    return 11 * mobility + 23 * corners;
+    return 11 * mobility + 23 * corners + board.count(color);
 }
 
 int heuristic(const Board board, PlayerColor color) {
-    return heuristicHelper(board, color);
+    if (!board.existMovesFor(color)) {
+        if (!board.existMovesFor(reverse(color))) {
+            if (board.count(color) > board.count(reverse(color))) {
+                /* Win */
+                return BOUND - 1;
+            } else if (board.count(color) < board.count(reverse(color))) {
+                /* Loss */
+                return 1 - BOUND;
+            }
+            /* Draw */
+            return 0;
+        }
+    }
+    return heuristicHelper(board, color) -
+           heuristicHelper(board, reverse(color));
 }
 
 /* Estimates the value of a given game state BOARD for side COLOR at depth
  * DEPTH.
  */
-int getNextActionHelper(const Board board, PlayerColor color, int depth = 3) {
-    // If the game has ended..
-    if (!board.existMovesFor(color) && !board.existMovesFor(reverse(color))) {
-        if (board.count(color) > board.count(reverse(color))) {
-            return BOUND - board.count(reverse(color)) - board.count(color);
-        } else if (board.count(color) < board.count(reverse(color))) {
-            return -BOUND;
+int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
+    // Retrieve the list of available actions for this board state.
+    std::vector<Action> actionList = board.getMovesFor(color);
+    // If we are forced to pass..
+    if (actionList.empty() && depth > 0) {
+        // If the game has ended..
+        if (!board.existMovesFor(reverse(color))) {
+            if (board.count(color) > board.count(reverse(color))) {
+                /* Win */
+                return BOUND - 1;
+            } else if (board.count(color) < board.count(reverse(color))) {
+                /* Loss */
+                return 1 - BOUND;
+            }
+            /* Draw */
+            return 0;
+        } else {
+            return -getNextActionHelper(board, reverse(color), depth - 1);
         }
     }
 
@@ -46,8 +71,6 @@ int getNextActionHelper(const Board board, PlayerColor color, int depth = 3) {
         return heuristic(board, color);
     }
 
-    int current = board.count(color);
-    std::vector<Action> actionList = board.getMovesFor(color);
     std::vector<Action>::iterator it = actionList.begin();
     int bestReward = -BOUND;
     for (; it != actionList.end(); ++it) {
@@ -61,7 +84,7 @@ int getNextActionHelper(const Board board, PlayerColor color, int depth = 3) {
     return bestReward;
 }
 
-Action GreedyPlayer::getNextAction(Board board) {
+Action GreedyPlayer::getNextAction(const Board& board) {
     std::vector<Action> actionList = board.getMovesFor(getColor());
     std::vector<Action>::iterator it = actionList.begin();
     int current = board.count(getColor());
@@ -70,7 +93,9 @@ Action GreedyPlayer::getNextAction(Board board) {
     for (; it != actionList.end(); ++it) {
         Board testBoard = board.getCopy();
         testBoard.attempt(*it);
-        int reward = 0 - getNextActionHelper(testBoard, reverse(getColor()));
+        int reward = 0 - getNextActionHelper(testBoard,
+                                             reverse(getColor()),
+                                             m_iQ);
         if (reward > bestReward) {
             bestReward = reward;
             bestAction = it;
