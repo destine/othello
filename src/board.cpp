@@ -90,34 +90,20 @@ bool Board::attempt(Action action) {
         return false;
     }
 
-    // Find directions with opponent pieces to turn over.
-    bool isLeft      = _isValidHelper(action, -1, 0);
-    bool isRight     = _isValidHelper(action, 1, 0);
-    bool isUp        = _isValidHelper(action, 0, -1);
-    bool isDown      = _isValidHelper(action, 0, 1);
-    bool isUpLeft    = _isValidHelper(action, -1, -1);
-    bool isUpRight   = _isValidHelper(action, 1, -1);
-    bool isDownLeft  = _isValidHelper(action, -1, 1);
-    bool isDownRight = _isValidHelper(action, 1, 1);
-
-    if (isLeft || isRight || isUp || isDown ||
-        isUpLeft || isUpRight || isDownLeft || isDownRight) {
-        // Set the piece.
+    bool isSuccess = false;
+    // Flip opponent pieces.
+    isSuccess |= _attemptHelper(action, -1, 0);
+    isSuccess |= _attemptHelper(action, 1, 0);
+    isSuccess |= _attemptHelper(action, 0, -1);
+    isSuccess |= _attemptHelper(action, 0, 1);
+    isSuccess |= _attemptHelper(action, -1, -1);
+    isSuccess |= _attemptHelper(action, 1, -1);
+    isSuccess |= _attemptHelper(action, -1, 1);
+    isSuccess |= _attemptHelper(action, 1, 1);
+    if (isSuccess) {
         set(action.getRow(), action.getCol(), action.getColor());
-        // Flip opponent pieces.
-        if (isLeft) { _attemptHelper(action, -1, 0); }
-        if (isRight) { _attemptHelper(action, 1, 0); }
-        if (isUp) { _attemptHelper(action, 0, -1); }
-        if (isDown) { _attemptHelper(action, 0, 1); }
-        if (isUpLeft) { _attemptHelper(action, -1, -1); }
-        if (isUpRight) { _attemptHelper(action, 1, -1); }
-        if (isDownLeft) { _attemptHelper(action, -1, 1); }
-        if (isDownRight) { _attemptHelper(action, 1, 1); }
-        return true;
-    } else {
-        // No pieces can be turned over.
-        return false;
     }
+    return isSuccess;
 }
 
 bool Board::existMovesFor(PlayerColor playerColor) const {
@@ -224,9 +210,14 @@ bool Board::_isValidHelper(Action& action, int rIncr, int cIncr) const {
     return false;
 }
 
-void Board::_attemptHelper(Action& action, int rIncr, int cIncr) {
+bool Board::_attemptHelper(Action& action, int rIncr, int cIncr) {
+    if (!_isValidHelper(action, rIncr, cIncr)) {
+        return false;
+    }
+
     int r = action.getRow() + rIncr;
     int c = action.getCol() + cIncr;
+
     while (isWithinBoard(r, c)) {
         if (get(r, c) == action.getColor()) {
             break;
@@ -236,4 +227,6 @@ void Board::_attemptHelper(Action& action, int rIncr, int cIncr) {
         r += rIncr;
         c += cIncr; 
     }
+
+    return true;
 }

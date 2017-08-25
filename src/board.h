@@ -24,7 +24,7 @@ private:
     bool set(int r, int c, PlayerColor color);
     bool isValid(Action action, PlayerColor playerColor) const;
     bool _isValidHelper(Action& action, int rowIncr, int colIncr) const;
-    void _attemptHelper(Action& action, int rowIncr, int colIncr);
+    bool _attemptHelper(Action& action, int rowIncr, int colIncr);
 };
 
 #endif
