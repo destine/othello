@@ -3,7 +3,7 @@
 #include <vector>
 #include <cstdlib>
 
-Action NaivePlayer::getNextAction(Board board) {
+Action NaivePlayer::getNextAction(const Board& board) {
     std::vector<Action> actionList = board.getMovesFor(getColor());
 
     std::vector<Action>::iterator rand_elem = actionList.begin();

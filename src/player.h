@@ -9,7 +9,7 @@ class Player {
 public:
     Player(PlayerColor color): m_color(color) {}
     PlayerColor getColor() { return m_color; }
-    virtual Action getNextAction(Board gameState) = 0;
+    virtual Action getNextAction(const Board& gameState) = 0;
 };
 
 class HumanPlayer : public Player {
@@ -17,7 +17,7 @@ public:
     HumanPlayer(PlayerColor color):
         Player(color) {
     }
-    virtual Action getNextAction(Board gameState);
+    virtual Action getNextAction(const Board& gameState);
 };
 
 class NaivePlayer : public Player {
@@ -25,15 +25,16 @@ public:
     NaivePlayer(PlayerColor color):
         Player(color) {
     }
-    virtual Action getNextAction(Board gameState);
+    virtual Action getNextAction(const Board& gameState);
 };
 
 class GreedyPlayer : public Player {
+    int m_iQ;
 public:
-    GreedyPlayer(PlayerColor color):
-        Player(color) {
+    GreedyPlayer(PlayerColor color, int iQ):
+        Player(color), m_iQ(iQ) {
     }
-    virtual Action getNextAction(Board gameState);
+    virtual Action getNextAction(const Board& gameState);
 };
 
 #endif
