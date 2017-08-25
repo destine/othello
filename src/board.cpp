@@ -62,17 +62,14 @@ bool Board::isValid(Action action, PlayerColor color) const {
     }
 
     // Find directions with opponent pieces to turn over.
-    bool isLeft      = _isValidHelper(action, -1, 0);
-    bool isRight     = _isValidHelper(action, +1, 0);
-    bool isUp        = _isValidHelper(action, 0, -1);
-    bool isDown      = _isValidHelper(action, 0, +1);
-    bool isUpLeft    = _isValidHelper(action, -1, -1);
-    bool isUpRight   = _isValidHelper(action, +1, -1);
-    bool isDownLeft  = _isValidHelper(action, -1, +1);
-    bool isDownRight = _isValidHelper(action, +1, +1);
-
-    if (isLeft || isRight || isUp || isDown ||
-        isUpLeft || isUpRight || isDownLeft || isDownRight) {
+    if (_isValidHelper(action, -1, 0) ||
+        _isValidHelper(action, +1, 0) ||
+        _isValidHelper(action, 0, -1) ||
+        _isValidHelper(action, 0, +1) ||
+        _isValidHelper(action, -1, -1) ||
+        _isValidHelper(action, +1, -1) ||
+        _isValidHelper(action, -1, +1) ||
+        _isValidHelper(action, +1, +1)) {
         return true;
     } else {
         // No pieces can be turned over.
@@ -92,26 +89,28 @@ bool Board::attempt(Action action) {
 
     bool isSuccess = false;
     // Flip opponent pieces.
-    isSuccess |= _attemptHelper(action, -1, 0);
-    isSuccess |= _attemptHelper(action, 1, 0);
-    isSuccess |= _attemptHelper(action, 0, -1);
-    isSuccess |= _attemptHelper(action, 0, 1);
-    isSuccess |= _attemptHelper(action, -1, -1);
-    isSuccess |= _attemptHelper(action, 1, -1);
-    isSuccess |= _attemptHelper(action, -1, 1);
-    isSuccess |= _attemptHelper(action, 1, 1);
-    if (isSuccess) {
+    if (_attemptHelper(action, -1, 0) ||
+        _attemptHelper(action, +1, 0) ||
+        _attemptHelper(action, 0, -1) ||
+        _attemptHelper(action, 0, +1) ||
+        _attemptHelper(action, -1, -1) ||
+        _attemptHelper(action, +1, -1) ||
+        _attemptHelper(action, -1, +1) ||
+        _attemptHelper(action, +1, +1)) {
         set(action.getRow(), action.getCol(), action.getColor());
+        return true;
     }
-    return isSuccess;
+    return false;
 }
 
 bool Board::existMovesFor(PlayerColor playerColor) const {
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
-            Action testAction(playerColor, r, c);
-            if (isValid(testAction, playerColor)) {
-                return true;
+            if (get(r, c) == NONE) {
+                Action testAction(playerColor, r, c);
+                if (isValid(testAction, playerColor)) {
+                    return true;
+                }
             }
         }
     }

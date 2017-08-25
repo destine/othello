@@ -27,8 +27,8 @@ int heuristicHelper(const Board board, PlayerColor color) {
     return 11 * mobility + 23 * corners + board.count(color);
 }
 
-int heuristic(const Board board, PlayerColor color) {
-    if (!board.existMovesFor(color)) {
+int heuristic(const Board board, PlayerColor color, bool hasMoves) {
+    if (!hasMoves) {
         if (!board.existMovesFor(reverse(color))) {
             if (board.count(color) > board.count(reverse(color))) {
                 /* Win */
@@ -70,7 +70,7 @@ int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
     }
 
     if (depth == 0) {
-        return heuristic(board, color);
+        return heuristic(board, color, actionList.empty());
     }
 
     std::vector<Action>::iterator it = actionList.begin();
