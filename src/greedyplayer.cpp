@@ -27,8 +27,8 @@ int heuristicHelper(const Board board, PlayerColor color) {
     return 11 * mobility + 23 * corners + board.count(color);
 }
 
-int heuristic(const Board board, PlayerColor color, bool hasMoves) {
-    if (!hasMoves) {
+int heuristic(const Board board, PlayerColor color) {
+    if (!board.existMovesFor(color)) {
         if (!board.existMovesFor(reverse(color))) {
             if (board.count(color) > board.count(reverse(color))) {
                 /* Win */
@@ -51,8 +51,13 @@ int heuristic(const Board board, PlayerColor color, bool hasMoves) {
 int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
     // Retrieve the list of available actions for this board state.
     std::vector<Action> actionList = board.getMovesFor(color);
+
+    // Our base case.
+    if (depth < 1) {
+        return heuristic(board, color);
+    }
     // If we are forced to pass..
-    if (actionList.empty() && depth > 0) {
+    if (actionList.empty()) {
         // If the game has ended..
         if (!board.existMovesFor(reverse(color))) {
             if (board.count(color) > board.count(reverse(color))) {
@@ -67,10 +72,6 @@ int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
         } else {
             return -getNextActionHelper(board, reverse(color), depth - 1);
         }
-    }
-
-    if (depth == 0) {
-        return heuristic(board, color, actionList.empty());
     }
 
     std::vector<Action>::iterator it = actionList.begin();
@@ -119,7 +120,7 @@ Action GreedyPlayer::getNextAction(const Board& board) {
                                                 std::ref(board),
                                                 *it,
                                                 getColor(),
-                                                m_iQ,
+                                                m_lookAhead,
                                                 std::ref(bestReward),
                                                 std::ref(bestAction));
         ++threadNum;

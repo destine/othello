@@ -29,10 +29,10 @@ public:
 };
 
 class GreedyPlayer : public Player {
-    int m_iQ;
+    int m_lookAhead;
 public:
-    GreedyPlayer(PlayerColor color, int iQ):
-        Player(color), m_iQ(iQ) {
+    GreedyPlayer(PlayerColor color, int lookAhead):
+        Player(color), m_lookAhead(lookAhead) {
     }
     virtual Action getNextAction(const Board& gameState);
 };
