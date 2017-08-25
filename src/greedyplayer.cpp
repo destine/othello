@@ -1,5 +1,7 @@
 #include "player.h"
 #include <iostream>
+#include <thread>
+#include <mutex>
 
 #define BOUND 1000000
 
@@ -84,24 +86,51 @@ int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
     return bestReward;
 }
 
+std::mutex g_updateBestLock;
+void _evaluateBranch(const Board& board,
+                     Action action,
+                     PlayerColor color,
+                     int depth,
+                     int& bestReward,
+                     Action& bestAction) {
+    Board testBoard = board.getCopy();
+    testBoard.attempt(action);
+    int reward = 0 - getNextActionHelper(testBoard,
+                                         reverse(color),
+                                         depth);
+
+    std::lock_guard<std::mutex> lock(g_updateBestLock);
+    if (reward > bestReward) {
+        bestReward = reward;
+        bestAction = action;
+    }
+}
+
 Action GreedyPlayer::getNextAction(const Board& board) {
     std::vector<Action> actionList = board.getMovesFor(getColor());
+    std::thread* threadList[actionList.size()];
+
     std::vector<Action>::iterator it = actionList.begin();
-    int current = board.count(getColor());
     int bestReward = -BOUND;
-    std::vector<Action>::iterator bestAction = actionList.begin();
+    Action bestAction = *actionList.begin();
+    int threadNum = 0;
     for (; it != actionList.end(); ++it) {
-        Board testBoard = board.getCopy();
-        testBoard.attempt(*it);
-        int reward = 0 - getNextActionHelper(testBoard,
-                                             reverse(getColor()),
-                                             m_iQ);
-        if (reward > bestReward) {
-            bestReward = reward;
-            bestAction = it;
-        }
+        threadList[threadNum] = new std::thread(_evaluateBranch,
+                                                std::ref(board),
+                                                *it,
+                                                getColor(),
+                                                m_iQ,
+                                                std::ref(bestReward),
+                                                std::ref(bestAction));
+        ++threadNum;
     }
+
+    for (int i = 0; i < threadNum; ++i) {
+        threadList[i]->join();
+        delete threadList[i];
+    }
+
     std::cout << "Found action with expected value of: " << bestReward <<
                  std::endl;
-    return *bestAction;
+    return bestAction;
 }
