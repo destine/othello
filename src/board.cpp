@@ -13,11 +13,7 @@ Board::Board() {
 
 Board Board::getCopy() const {
     Board copy;
-    for (int r = 0; r < BOARD_SIZE; ++r) {
-        for (int c = 0; c < BOARD_SIZE; ++c) {
-            copy.set(r, c, get(r, c));
-        }
-    }
+    copy.board_array = this->board_array;
     return copy; 
 }
 
@@ -121,9 +117,11 @@ std::vector<Action> Board::getMovesFor(PlayerColor playerColor) const {
     std::vector<Action> myActions;
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
-            Action testAction(playerColor, r, c);
-            if (isValid(testAction, playerColor)) {
-                myActions.push_back(testAction);
+            if (get(r, c) == NONE) {
+                Action testAction(playerColor, r, c);
+                if (isValid(testAction, playerColor)) {
+                    myActions.push_back(testAction);
+                }
             }
         }
     }
