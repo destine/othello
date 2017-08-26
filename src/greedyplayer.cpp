@@ -48,7 +48,11 @@ int heuristic(const Board board, PlayerColor color) {
 /* Estimates the value of a given game state BOARD for side COLOR at depth
  * DEPTH.
  */
-int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
+int getNextActionHelper(const Board& board,
+                        PlayerColor color,
+                        int depth,
+                        int alpha,
+                        int beta) {
     // Retrieve the list of available actions for this board state.
     std::vector<Action> actionList = board.getMovesFor(color);
 
@@ -70,7 +74,11 @@ int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
             /* Draw */
             return 0;
         } else {
-            return -getNextActionHelper(board, reverse(color), depth - 1);
+            return -getNextActionHelper(board,
+                                        reverse(color),
+                                        depth - 1,
+                                        -BOUND,
+                                        -BOUND);
         }
     }
 
@@ -79,9 +87,20 @@ int getNextActionHelper(const Board& board, PlayerColor color, int depth) {
     for (; it != actionList.end(); ++it) {
         Board testBoard = board.getCopy();
         testBoard.attempt(*it);
-        int reward = -getNextActionHelper(testBoard, reverse(color), depth - 1);
+        int reward = -getNextActionHelper(testBoard,
+                                          reverse(color),
+                                          depth - 1,
+                                          beta,
+                                          alpha);
         if (reward > bestReward) {
             bestReward = reward;
+        }
+        // Alpha-Beta Pruning
+        if (bestReward > alpha) {
+            alpha = bestReward;
+        }
+        if (beta >= -alpha ) {
+            break;
         }
     }
     return bestReward;
@@ -98,7 +117,9 @@ void _evaluateBranch(const Board& board,
     testBoard.attempt(action);
     int reward = 0 - getNextActionHelper(testBoard,
                                          reverse(color),
-                                         depth);
+                                         depth,
+                                         -BOUND,
+                                         BOUND);
 
     std::lock_guard<std::mutex> lock(g_updateBestLock);
     if (reward > bestReward) {
