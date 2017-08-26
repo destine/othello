@@ -5,10 +5,11 @@
 Board::Board() {
     board_array.reset();
     // Initialize board position for reversi match.
-    set(3, 3, DARK);
-    set(4, 4, DARK);
-    set(3, 4, LIGHT);
-    set(4, 3, LIGHT);
+    int midPoint = BOARD_SIZE / 2;
+    set(midPoint - 1, midPoint - 1, DARK);
+    set(midPoint, midPoint, DARK);
+    set(midPoint - 1, midPoint, LIGHT);
+    set(midPoint, midPoint - 1, LIGHT);
 }
 
 Board Board::getCopy() const {
