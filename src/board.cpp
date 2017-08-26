@@ -83,17 +83,17 @@ bool Board::attempt(Action action) {
         return false;
     }
 
-    bool isSuccess = false;
     // Flip opponent pieces.
-    if (_attemptHelper(action, -1, 0) ||
-        _attemptHelper(action, +1, 0) ||
-        _attemptHelper(action, 0, -1) ||
-        _attemptHelper(action, 0, +1) ||
-        _attemptHelper(action, -1, -1) ||
-        _attemptHelper(action, +1, -1) ||
-        _attemptHelper(action, -1, +1) ||
-        _attemptHelper(action, +1, +1)) {
+    if (isValid(action, action.getColor())) {
         set(action.getRow(), action.getCol(), action.getColor());
+        _attemptHelper(action, -1, 0);
+        _attemptHelper(action, +1, 0);
+        _attemptHelper(action, 0, -1);
+        _attemptHelper(action, 0, +1);
+        _attemptHelper(action, -1, -1);
+        _attemptHelper(action, +1, -1);
+        _attemptHelper(action, -1, +1);
+        _attemptHelper(action, +1, +1);
         return true;
     }
     return false;
