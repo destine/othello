@@ -24,7 +24,10 @@ int heuristicHelper(const Board board, PlayerColor color) {
         ++corners;
     }
 
-    return 11 * mobility + 23 * corners + board.count(color);
+    int points = board.count(color);
+    int stage = (points + board.count(reverse(color))) / 10;
+
+    return 50 * mobility + 150 * corners + (stage - 2) * points;
 }
 
 int heuristic(const Board board, PlayerColor color) {
@@ -77,8 +80,8 @@ int getNextActionHelper(const Board& board,
             return -getNextActionHelper(board,
                                         reverse(color),
                                         depth - 1,
-                                        -BOUND,
-                                        -BOUND);
+                                        beta,
+                                        alpha);
         }
     }
 
@@ -99,7 +102,7 @@ int getNextActionHelper(const Board& board,
         if (bestReward > alpha) {
             alpha = bestReward;
         }
-        if (beta >= -alpha ) {
+        if (beta >= -alpha) {
             break;
         }
     }
@@ -119,7 +122,7 @@ void _evaluateBranch(const Board& board,
                                          reverse(color),
                                          depth,
                                          -BOUND,
-                                         BOUND);
+                                         -BOUND);
 
     std::lock_guard<std::mutex> lock(g_updateBestLock);
     if (reward > bestReward) {
