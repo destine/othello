@@ -15,7 +15,7 @@ public:
     Board();
     bool attempt(Action action);
     bool existMovesFor(PlayerColor playerColor) const;
-    void print() const;
+    void print(std::ostream& out) const;
     std::vector<Action> getMovesFor(PlayerColor playerColor) const;
     int count(PlayerColor color) const;
     Board getCopy() const;

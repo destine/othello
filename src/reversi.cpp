@@ -32,7 +32,7 @@ void Reversi::forward() {
 }
 
 void Reversi::print() {
-    m_board.print();
+    m_board.print(std::cout);
 
     std::cout << "Move #" << move_num << " - ";
 
@@ -51,7 +51,7 @@ bool Reversi::over() {
 }
 
 void Reversi::end() {
-    m_board.print();
+    m_board.print(std::cout);
 
     std::cout << ">> GAME OVER <<" << std::endl;
     std::cout << "DARK:  " << m_board.count(DARK) << std::endl;

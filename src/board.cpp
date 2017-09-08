@@ -129,32 +129,32 @@ std::vector<Action> Board::getMovesFor(PlayerColor playerColor) const {
     return myActions;
 }
 
-void printCell(PlayerColor cellColor) {
+void printCell(PlayerColor cellColor, std::ostream& out) {
     if (cellColor == DARK) {
-        std::cout << " X ";
+        out << " X ";
     } else if (cellColor == LIGHT) {
-        std::cout << " O ";
+        out << " O ";
     } else if (cellColor == NONE) {
-        std::cout << " - ";
+        out << " - ";
     } else {
         // TODO: Handle error.
-        std::cout << "Board::printCell >> Invalid cell! \n";
+        std::cerr << "Board::printCell >> Invalid cell! \n";
     }
 }
 
-void Board::print() const {
-    std::cout << "   ";
+void Board::print(std::ostream& out) const {
+    out << "   ";
     for (int i = 1; i <= BOARD_SIZE; ++i) {
-        std::cout << " " << i << " ";
+        out << " " << i << " ";
     }
-    std::cout << std::endl;
+    out << std::endl;
 
     for (int r = 0; r < BOARD_SIZE; ++r) {
-        std::cout << " " << (char) ('a' + r) << " ";
+        out << " " << (char) ('a' + r) << " ";
         for (int c = 0; c < BOARD_SIZE; ++c) {
-            printCell(get(r, c));
+            printCell(get(r, c), out);
         }
-        std::cout << std::endl;
+        out << std::endl;
     } 
 }
 
