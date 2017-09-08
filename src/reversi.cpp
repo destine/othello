@@ -3,7 +3,7 @@
 #include <iostream>
 
 void Reversi::init() {
-    if (m_player1.getColor() != DARK || m_player2.getColor() != LIGHT) {
+    if (m_player1->getColor() != DARK || m_player2->getColor() != LIGHT) {
         std::cerr << "Player configuration invalid! " << std::endl;
     }
 }
@@ -13,9 +13,9 @@ void Reversi::forward() {
     ++move_num;
 
     if (m_board.existMovesFor(nextToMove)) {
-        Player* player = &m_player1;
+        Player* player = m_player1;
         if (nextToMove == LIGHT) {
-            player = &m_player2;
+            player = m_player2;
         }
         while (!m_board.attempt(player->getNextAction(m_board))) {
             std::cerr << "Invalid Move!" << std::endl;

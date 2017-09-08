@@ -10,6 +10,7 @@ public:
     Player(PlayerColor color): m_color(color) {}
     PlayerColor getColor() { return m_color; }
     virtual Action getNextAction(const Board& gameState) = 0;
+    virtual ~Player() {}
 };
 
 class HumanPlayer : public Player {
