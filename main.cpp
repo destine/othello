@@ -7,6 +7,10 @@
 
 int match(Player* player1, Player* player2);
 
+/* Parse command line options ARGV and set parameters accordingly.
+ * Guarantees that all parameters will be initialized to a valid non-null
+ * value.
+ */
 void parseCommandOptions(int argc, char** argv,
                          Player*& player1, Player*& player2,
                          int& rounds,
