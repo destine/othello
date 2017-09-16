@@ -12,5 +12,7 @@ The object of the game is to have the majority of disks turned to display your c
 
 ### Status
 
-- Multi-threading
-- Alpha-Beta Pruning
+- Multi-threading [DONE]
+- Alpha-Beta Pruning [DONE]
+- Client [IN PROGRESS]
+- GUI [IN PROGRESS]
