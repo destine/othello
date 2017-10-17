@@ -12,9 +12,13 @@ To begin a game with a human player as dark (player one) and the AI "Greedy" as 
 
 `build/reverse -playerOne human -playerTwo greedy`
 
-To begin a game with the AI "Greedy" as dark (player one) and itself as light (player two):
+To begin a match between "Greedy" against itself:
 
 `build/reverse -playerOne greedy -playerTwo greedy`
+
+By default, the above commands will begin ten rounds. To override this setting, simply use the -rounds option.
+
+`build/reverse -playerOne greedy -playerTwo greedy -rounds 1`
 
 ### About the Game
 
