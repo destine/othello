@@ -8,8 +8,13 @@ This project is an implementation of the famous game Reversi and an AI for the g
 
 After running make, you should an executable file inside `build/`. Run from the root directory with `build/reverse`. This will begin a new game between two human players. To set the players on each side, use the -playerOne and -playerTwo options as follows.
 
-To begin a game with a human player as dark (player one) and the AI "Greedy" as light (player two), run:
+To begin a game with a human player as dark (player one) and the AI "Greedy" as light (player two):
+
 `build/reverse -playerOne human -playerTwo greedy`
+
+To begin a game with the AI "Greedy" as dark (player one) and itself as light (player two):
+
+`build/reverse -playerOne greedy -playerTwo greedy`
 
 ### About the Game
 
