@@ -6,10 +6,10 @@ Board::Board() {
     board_array.reset();
     // Initialize board position for reversi match.
     int midPoint = BOARD_SIZE / 2;
-    set(midPoint - 1, midPoint - 1, DARK);
-    set(midPoint, midPoint, DARK);
-    set(midPoint - 1, midPoint, LIGHT);
-    set(midPoint, midPoint - 1, LIGHT);
+    set(midPoint - 1, midPoint - 1, LIGHT);
+    set(midPoint, midPoint, LIGHT);
+    set(midPoint - 1, midPoint, DARK);
+    set(midPoint, midPoint - 1, DARK);
 }
 
 Board Board::getCopy() const {
@@ -144,18 +144,24 @@ void printCell(PlayerColor cellColor, std::ostream& out) {
 
 void Board::print(std::ostream& out) const {
     out << "   ";
-    for (int i = 1; i <= BOARD_SIZE; ++i) {
-        out << " " << i << " ";
+    for (int i = 0; i < BOARD_SIZE; ++i) {
+        out << " " << (char) ('a' + i) << " ";
     }
     out << std::endl;
 
     for (int r = 0; r < BOARD_SIZE; ++r) {
-        out << " " << (char) ('a' + r) << " ";
+        out << " " << 1 + r << " ";
         for (int c = 0; c < BOARD_SIZE; ++c) {
             printCell(get(r, c), out);
         }
-        out << std::endl;
+        out << " " << 1 + r << std::endl;
     } 
+
+    out << "   ";
+    for (int i = 0; i < BOARD_SIZE; ++i) {
+        out << " " << (char) ('a' + i) << " ";
+    }
+    out << std::endl;
 }
 
 bool Board::set(int r, int c, PlayerColor color) {

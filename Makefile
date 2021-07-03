@@ -1,9 +1,12 @@
 CC = g++
+PYLIBPATH = $(shell python-config --exec-prefix)/lib
+LIB = -L$(PYLIBPATH) $(shell python-config --libs) -lboost_python
+OPTS = $(shell python-config --include) -O2
 
 CFLAGS = -c -O2 -pthread -std=c++0x
 LFLAGS = -O2 -pthread -std=c++0x
 
-TARGET = build/reversi
+TARGET = build/othello
 
 SRCS  := $(wildcard src/*.cpp)
 OBJS  := $(SRCS:.cpp=.o)

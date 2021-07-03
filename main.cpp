@@ -3,7 +3,7 @@
 #include <ctime>
 
 #include "src/player.h"
-#include "src/reversi.h"
+#include "src/othello.h"
 
 int match(Player* player1, Player* player2);
 
@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
 }
 
 int match(Player* playerOne, Player* playerTwo) {
-    Reversi game(playerOne, playerTwo);
+    Othello game(playerOne, playerTwo);
     game.init();
 
     while (!game.over()) {
@@ -84,6 +84,13 @@ int match(Player* playerOne, Player* playerTwo) {
 }
 
 void help() {
+    std::cout << "Flags:" << std::endl;
+    std::cout << " * -playerOne: Set player one to one of the following " <<
+                 " player types.\n * * human\n * * greedy\n";
+    std::cout << " * -playerTwo: Set player two to one of the above player " <<
+                 "types.\n";
+    std::cout << " * -rounds: Set the number of rounds to be played. " <<
+                 " Followed by an integer representing the number of rounds.\n";
 }
 
 void parseCommandOptions(int argc, char** argv,

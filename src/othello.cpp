@@ -1,14 +1,14 @@
-#include "reversi.h"
+#include "othello.h"
 
 #include <iostream>
 
-void Reversi::init() {
+void Othello::init() {
     if (m_player1->getColor() != DARK || m_player2->getColor() != LIGHT) {
         std::cerr << "Player configuration invalid! " << std::endl;
     }
 }
 
-void Reversi::forward() {
+void Othello::forward() {
     print();
     ++move_num;
 
@@ -31,7 +31,7 @@ void Reversi::forward() {
     nextToMove = reverse(nextToMove);
 }
 
-void Reversi::print() {
+void Othello::print() {
     m_board.print(std::cout);
 
     std::cout << "Move #" << move_num << " - ";
@@ -46,11 +46,11 @@ void Reversi::print() {
     std::cout << std::endl;
 }
 
-bool Reversi::over() {
+bool Othello::over() {
     return m_isOver;
 }
 
-void Reversi::end() {
+void Othello::end() {
     m_board.print(std::cout);
 
     std::cout << ">> GAME OVER <<" << std::endl;
@@ -60,6 +60,6 @@ void Reversi::end() {
     m_isOver = true;
 }
 
-int Reversi::getScore(PlayerColor color) {
+int Othello::getScore(PlayerColor color) {
     return m_board.count(color);
 }

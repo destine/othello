@@ -4,7 +4,7 @@
 #include "player.h"
 #include "board.h"
 
-class Reversi {
+class Othello {
     Player* m_player1;
     Player* m_player2;
     Board m_board;
@@ -12,7 +12,7 @@ class Reversi {
     PlayerColor nextToMove = DARK;
     bool m_isOver = false;
 public:
-    Reversi(Player* player1, Player* player2):
+    Othello(Player* player1, Player* player2):
         m_player1(player1), m_player2(player2) {
     }
     void init();

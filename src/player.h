@@ -21,6 +21,13 @@ public:
     virtual Action getNextAction(const Board& gameState);
 };
 
+class RemotePlayer : public Player {
+    int m_clientSocket;
+public:
+    RemotePlayer(PlayerColor color, int serverSocket);
+    virtual Action getNextAction(const Board& gameState);
+};
+
 class NaivePlayer : public Player {
 public:
     NaivePlayer(PlayerColor color):
